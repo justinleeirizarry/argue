@@ -8,6 +8,7 @@ import Textarea from "react-textarea-autosize";
 import { useEnterSubmit } from "@/lib/hooks/use-enter-submit";
 
 import MessagesComponent from "@/components/message-list";
+import Webcam from "@/components/webcam";
 
 interface SearchResult {
   favicon: string;
@@ -57,6 +58,7 @@ export default function Page() {
   const oppositionRef = useRef<HTMLTextAreaElement>(null);
   const [inputValue, setInputValue] = useState("");
   const [opposition, setOpposition] = useState("");
+  const [showWebcam, setShowWebcam] = useState(false);
   // 5. Set up state for the messages
   const [messages, setMessages] = useState<Message[]>([]);
   // 6. Set up state for the CURRENT LLM response (for displaying in the UI while streaming)
@@ -98,23 +100,21 @@ export default function Page() {
     console.log("Argument:", content.argument);
 
     if (content.argument) {
-      // Logic for when argument is true
       await handleUserMessageSubmission(message);
     } else {
-      // Logic for when argument is false
       console.log("Argument is false");
+      setShowWebcam(true);
     }
-    // await handleUserMessageSubmission(message, additionalMessage);
   };
   const handleFormSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
     const messageToSend = inputValue.trim();
-    const OpMessageToSend = opposition.trim(); // Capture the second input
+    const OpMessageToSend = opposition.trim();
     if (!messageToSend || !OpMessageToSend) return;
     setInputValue("");
-    setOpposition(""); // Reset the second input
+    setOpposition("");
     await handleSubmit(messageToSend, OpMessageToSend);
   };
   const handleUserMessageSubmission = async (
@@ -187,6 +187,7 @@ export default function Page() {
         currentLlmResponse={currentLlmResponse}
       />
       <div className="pb-[80px] pt-4 md:pt-10">
+        {showWebcam && <Webcam />}
         <ChatScrollAnchor trackVisibility={true} />
       </div>
       <div className="fixed inset-x-0 bottom-0 w-full bg-gradient-to-b duration-300 ease-in-out animate-in  peer-[[data-state=open]]:group-[]:lg:pl-[250px] peer-[[data-state=open]]:group-[]:xl:pl-[300px]] mb-4">

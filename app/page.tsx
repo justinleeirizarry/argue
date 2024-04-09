@@ -9,6 +9,7 @@ import { useEnterSubmit } from "@/lib/hooks/use-enter-submit";
 
 import MessagesComponent from "@/components/message-list";
 import Webcam from "@/components/webcam";
+import InputComponent from "@/components/double-input";
 
 interface SearchResult {
   favicon: string;
@@ -99,7 +100,7 @@ export default function Page() {
     const content = JSON.parse(test.choices[0].message.content);
     console.log("Argument:", content.argument);
 
-    if (content.argument) {
+    if (content.argument === true) {
       await handleUserMessageSubmission(message);
     } else {
       console.log("Argument is false");
@@ -190,9 +191,9 @@ export default function Page() {
         {showWebcam && <Webcam />}
         <ChatScrollAnchor trackVisibility={true} />
       </div>
-      <div className="fixed inset-x-0 bottom-0 w-full bg-gradient-to-b duration-300 ease-in-out animate-in  peer-[[data-state=open]]:group-[]:lg:pl-[250px] peer-[[data-state=open]]:group-[]:xl:pl-[300px]] mb-4">
+      <div className="fixed inset-x-0 bottom-0 w-full border-2 bg-gradient-to-b duration-300 ease-in-out animate-in  peer-[[data-state=open]]:group-[]:lg:pl-[250px] peer-[[data-state=open]]:group-[]:xl:pl-[300px]] mb-4">
         <div className="mx-auto sm:max-w-2xl sm:px-4">
-          <div className="px-4 py-2 space-y-4 border-t shadow-lg bg-gray-100 rounded-xl sm:border md:py-4">
+          <div className="px-4 py-2 space-y-4 border-t shadow-lg bg-blue-300 rounded-xl sm:border md:py-4 ">
             <form
               ref={formRef}
               onSubmit={async (e: FormEvent<HTMLFormElement>) => {
@@ -207,38 +208,15 @@ export default function Page() {
                 if (!value) return;
               }}
             >
-              <div className="relative flex flex-col w-full overflow-hidden max-h-90 grow bg-gray-100 rounded-xl sm:border sm:px-2">
-                <Textarea
-                  ref={inputRef}
-                  tabIndex={0}
-                  onKeyDown={onKeyDown}
-                  placeholder="Your Version..."
-                  className="min-h-[60px] w-full resize-none bg-transparent px-4 py-[1.3rem] focus-within:outline-none sm:text-sm  text-black"
-                  autoFocus
-                  spellCheck={false}
-                  autoComplete="off"
-                  autoCorrect="off"
-                  name="message"
-                  rows={1}
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                />
-                <Textarea
-                  ref={oppositionRef}
-                  tabIndex={0}
-                  onKeyDown={onKeyDown}
-                  placeholder="Their Version..."
-                  className="border-t min-h-[60px] w-full resize-none bg-transparent px-4 py-[1.3rem] focus-within:outline-none sm:text-sm  text-black"
-                  autoFocus
-                  spellCheck={false}
-                  autoComplete="off"
-                  autoCorrect="off"
-                  name="opposition"
-                  rows={1}
-                  value={opposition}
-                  onChange={(e) => setOpposition(e.target.value)}
-                />
-              </div>
+              <InputComponent
+                inputRef={inputRef}
+                inputValue={inputValue}
+                setInputValue={setInputValue}
+                oppositionRef={oppositionRef}
+                opposition={opposition}
+                setOpposition={setOpposition}
+                onKeyDown={onKeyDown}
+              />
             </form>
           </div>
         </div>

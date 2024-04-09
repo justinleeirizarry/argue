@@ -5,13 +5,13 @@ export async function Header() {
   return (
     <header className="sticky top-0 z-50 flex items-center justify-between w-full px-4 border-b h-14 shrink-0 bg-white backdrop-blur-xl">
       <span className="inline-flex items-center home-links whitespace-nowrap">
-        <a href="https://developersdigest.tech" rel="noopener" target="_blank">
-          <span className="block sm:inline text-lg sm:text-xl lg:text-2xl font-semibold  text-black">
-            Kelly
+        <a href="" rel="noopener" target="_blank">
+          <span className="block sm:inline text-5xl sm:text-xl  font-black  text-black">
+            Kelly Needs Recipts
           </span>
         </a>
       </span>
-      <div className="flex items-center justify-end space-x-2">
+      {/* <div className="flex items-center justify-end space-x-2">
         <Button variant="outline" asChild>
           <a
             target="_blank"
@@ -23,7 +23,7 @@ export async function Header() {
             <span className="hidden ml-2 md:flex">github</span>
           </a>
         </Button>
-      </div>
+      </div> */}
     </header>
   );
 }

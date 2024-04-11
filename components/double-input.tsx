@@ -1,5 +1,7 @@
 import React, { RefObject } from "react";
 import { Textarea } from "./ui/textarea";
+import { Label } from "./ui/label";
+import { Button } from "./ui/button";
 
 interface InputComponentProps {
   inputRef: RefObject<HTMLTextAreaElement>;
@@ -21,14 +23,16 @@ const InputComponent: React.FC<InputComponentProps> = ({
   onKeyDown,
 }) => {
   return (
-    <div className="relative flex flex-col justify-center align-middle w-full overflow-hidden  grow bg-red-300 h-[40rem] gap-20 rounded-xl sm:border sm:px-2">
-      <h2>Your Side</h2>
+    <div className="grid w-full gap-8">
+      <Label className="text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-teal-500 text-6xl font-black flex-grow  text-black uppercase">
+        Your Side
+      </Label>
       <Textarea
         ref={inputRef}
         tabIndex={0}
         onKeyDown={onKeyDown}
-        placeholder="Your Version..."
-        className="min-h-[60px] w-full resize-none bg-transparent px-4 py-[1.3rem] focus-within:outline-none sm:text-sm  text-black"
+        placeholder=""
+        className="text-xl"
         autoFocus
         spellCheck={false}
         autoComplete="off"
@@ -38,13 +42,16 @@ const InputComponent: React.FC<InputComponentProps> = ({
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
       />
-      <h2>Your Side</h2>
+
+      <Label className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400 text-6xl font-black flex-grow  uppercase">
+        Their Side
+      </Label>
       <Textarea
         ref={oppositionRef}
         tabIndex={0}
         onKeyDown={onKeyDown}
-        placeholder="Their Version..."
-        className="border-t min-h-[60px] w-full resize-none bg-transparent px-4 py-[1.3rem] focus-within:outline-none sm:text-sm  text-black"
+        placeholder=""
+        className="text-xl"
         autoFocus
         spellCheck={false}
         autoComplete="off"
@@ -54,8 +61,10 @@ const InputComponent: React.FC<InputComponentProps> = ({
         value={opposition}
         onChange={(e) => setOpposition(e.target.value)}
       />
+      <Button className="font-black text-3xl p-8 " type="submit" size="lg">
+        Find Out
+      </Button>
     </div>
   );
 };
-
 export default InputComponent;

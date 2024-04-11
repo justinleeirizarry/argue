@@ -61,7 +61,7 @@ const SearchResultsComponent = ({
 
   // 11. Render the 'SearchResultsComponent'
   return (
-    <div className=" bg-white shadow-lg rounded-lg p-4 mt-4">
+    <div className="  shadow-lg rounded-lg p-4 mt-4 border bg-white">
       <div className="flex items-center">
         <h2 className="text-lg font-semibold flex-grow  text-black">Sources</h2>
       </div>
@@ -73,7 +73,7 @@ const SearchResultsComponent = ({
           // 13. Render the search results with favicon, title, and link
           visibleResults.map((result, index) => (
             <div key={index} className="p-2 w-full sm:w-1/2 md:w-1/4">
-              <div className="flex items-center space-x-2  bg-gray-100 p-3 rounded-lg h-full">
+              <div className="flex items-center space-x-2 border   p-3 rounded-xl h-full">
                 {!loadedFavicons[index] && (
                   <div className="w-5 h-5  bg-gray-400 rounded animate-pulse"></div>
                 )}
@@ -99,7 +99,7 @@ const SearchResultsComponent = ({
         <div className="w-full sm:w-full md:w-1/4 p-2">
           <div
             onClick={toggleExpansion}
-            className="flex items-center space-x-2  bg-gray-100 p-3 rounded-lg cursor-pointer h-12 justify-center"
+            className="flex items-center space-x-2   p-3 rounded-lg cursor-pointer h-12 justify-center"
           >
             {!isExpanded ? (
               <>

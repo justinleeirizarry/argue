@@ -3,13 +3,11 @@ import { Button } from "@/components/ui/button";
 
 export async function Header() {
   return (
-    <header className="sticky top-0 z-50 flex items-center justify-between w-full px-4 border-b h-14 shrink-0 bg-white backdrop-blur-xl">
-      <span className="inline-flex items-center home-links whitespace-nowrap">
-        <a href="" rel="noopener" target="_blank">
-          <span className="block sm:inline text-5xl sm:text-xl  font-black  text-black">
-            Kelly Needs Recipts
-          </span>
-        </a>
+    <header className="sticky top-0 z-50 flex items-center justify-between w-full px-4 border-b h-14 shrink-0 bg-white backdrop-blur-xl ">
+      <span className="inline-flex items-center home-links whitespace-nowrap ">
+        <span className="block sm:inline  text-5xl font-bold text-black ">
+          Kelly Needs Recipts
+        </span>
       </span>
       {/* <div className="flex items-center justify-end space-x-2">
         <Button variant="outline" asChild>

@@ -1,5 +1,6 @@
 // 1. Import the 'useState' hook from React
 import { useState } from "react";
+import { Button } from "../ui/button";
 
 // 2. Define the 'Image' interface with a required 'link' property and an optional 'alt' property
 interface Image {
@@ -85,12 +86,14 @@ const ImagesComponent: React.FC<ImagesComponentProps> = ({ images }) => {
       {images.length > 3 && (
         // 12. Render a 'Show More/Show Less' button if there are more than 3 images
         <div className="flex justify-center mt-4">
-          <button
-            className="bg-gray-100  hover:bg-gray-200  text-black  font-semibold py-2 px-4 rounded shadow"
+          <Button
+            className="rounded-full"
+            variant="outline"
+            size="sm"
             onClick={() => setShowMore(!showMore)}
           >
             {showMore ? "Show Less" : "Show More"}
-          </button>
+          </Button>
         </div>
       )}
       {selectedImage && (

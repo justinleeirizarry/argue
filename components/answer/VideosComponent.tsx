@@ -1,5 +1,6 @@
 // 1. Import the necessary hooks from the 'react' library
 import { useState, useEffect } from "react";
+import { Button } from "../ui/button";
 
 // 2. Define the 'Video' interface to represent a video object
 interface Video {
@@ -112,12 +113,14 @@ const VideosComponent: React.FC<VideosComponentProps> = ({ videos }) => {
       {/* 15. Render the "Show More" or "Show Less" button if there are more than 3 videos */}
       {videos.length > 3 && (
         <div className="flex justify-center mt-4">
-          <button
-            className="border   hover:bg-gray-200  text-black font-semibold py-2 px-4 rounded shadow"
+          <Button
+            className="rounded-full"
+            variant="outline"
+            size="sm"
             onClick={() => setShowMore(!showMore)}
           >
             {showMore ? "Show Less" : "Show More"}
-          </button>
+          </Button>
         </div>
       )}
 

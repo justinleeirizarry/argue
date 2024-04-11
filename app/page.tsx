@@ -60,6 +60,7 @@ export default function Page() {
   const [inputValue, setInputValue] = useState("");
   const [opposition, setOpposition] = useState("");
   const [showWebcam, setShowWebcam] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   // 5. Set up state for the messages
   const [messages, setMessages] = useState<Message[]>([]);
   // 6. Set up state for the CURRENT LLM response (for displaying in the UI while streaming)
@@ -133,6 +134,7 @@ export default function Page() {
       isStreaming: true,
       searchResults: [] as SearchResult[],
     };
+    setIsLoading(true);
     setMessages((prevMessages) => [...prevMessages, newMessage]);
     let lastAppendedResponse = "";
     try {
@@ -179,6 +181,7 @@ export default function Page() {
       }
     } catch (error) {
       console.error("Error streaming data for user message:", error);
+      setIsLoading(false);
     }
   };
   return (
@@ -191,9 +194,10 @@ export default function Page() {
         {showWebcam && <Webcam />}
         <ChatScrollAnchor trackVisibility={true} />
       </div>
-      <div className="fixed inset-x-0 bottom-0 w-full border-2 bg-gradient-to-b duration-300 ease-in-out animate-in  peer-[[data-state=open]]:group-[]:lg:pl-[250px] peer-[[data-state=open]]:group-[]:xl:pl-[300px]] mb-4">
+
+      {!showWebcam && messages.length === 0 && (
         <div className="mx-auto sm:max-w-2xl sm:px-4">
-          <div className="px-4 py-2 space-y-4 border-t shadow-lg bg-blue-300 rounded-xl sm:border md:py-4 ">
+          <div className="px-4 py-2 space-y-4 border-t shadow-lg rounded-xl sm:border md:py-4 ">
             <form
               ref={formRef}
               onSubmit={async (e: FormEvent<HTMLFormElement>) => {
@@ -220,7 +224,7 @@ export default function Page() {
             </form>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

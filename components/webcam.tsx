@@ -9,6 +9,7 @@ const WebcamComponent = () => {
 
   return (
     <div className="container">
+      <h1 className="text-7xl font-black ">Why you are wrong </h1>
       <Webcam videoConstraints={videoConstraints} />
     </div>
   );

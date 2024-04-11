@@ -60,7 +60,7 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
   currentLlmResponse,
 }) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col ">
       {messages.map((message, index) => (
         <div key={`message-${index}`} className="flex flex-col md:flex-row">
           <div className="w-full md:w-3/4 md:pr-2">

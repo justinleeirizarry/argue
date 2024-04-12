@@ -44,11 +44,7 @@ const LLMResponseComponent = ({
       {hasLlmResponse ? (
         // 6. If 'llmResponse' is not empty, render a div with the 'Markdown' component
         <div className=" bg-white shadow-lg border rounded-lg p-12 mt-4">
-          <div className="flex items-center">
-            <h2 className="text-4xl font-bold flex-grow  text-black mb-4 uppercase">
-              Why you are correct
-            </h2>
-          </div>
+          <div className="flex items-center"></div>
           <div className=" text-gray-800">
             <Markdown>{llmResponse}</Markdown>
           </div>

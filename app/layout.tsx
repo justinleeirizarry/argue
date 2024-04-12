@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
 import { AI } from "./action";
-import { Header } from "@/components/header";
+
 import { Providers } from "@/components/providers";
 
 const meta = {
@@ -16,7 +16,7 @@ const meta = {
 export const metadata: Metadata = {
   ...meta,
   title: {
-    default: "answer engine",
+    default: "yousaidtheysaid",
     template: `%s - answer engine`,
   },
   icons: {

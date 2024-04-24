@@ -1,15 +1,29 @@
 "use client";
-// 1. Import Dependencies
-import { FormEvent, useEffect, useRef, useState, useCallback } from "react";
+
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { useActions, readStreamableValue } from "ai/rsc";
 import { type AI } from "./action";
 import { ChatScrollAnchor } from "@/lib/hooks/chat-scroll-anchor";
-import Textarea from "react-textarea-autosize";
 import { useEnterSubmit } from "@/lib/hooks/use-enter-submit";
 
 import MessagesComponent from "@/components/message-list";
 import Webcam from "@/components/webcam";
 import InputComponent from "@/components/double-input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Form } from "@/components/ui/form";
+
+const FormSchema = z.object({
+  arguement: z
+    .string()
+    .min(10, {
+      message: "Please enter your side",
+    })
+    .max(160, {
+      message: "Please enter the oppositon.",
+    }),
+});
 
 interface SearchResult {
   favicon: string;
@@ -51,23 +65,21 @@ interface FollowUp {
   }[];
 }
 export default function Page() {
-  // 3. Set up action that will be used to stream all the messages
   const { myAction, Decider } = useActions<typeof AI>();
-  // 4. Set up form submission handling
   const { formRef, onKeyDown } = useEnterSubmit();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const oppositionRef = useRef<HTMLTextAreaElement>(null);
   const [inputValue, setInputValue] = useState("");
   const [opposition, setOpposition] = useState("");
   const [showWebcam, setShowWebcam] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  // 5. Set up state for the messages
   const [messages, setMessages] = useState<Message[]>([]);
-  // 6. Set up state for the CURRENT LLM response (for displaying in the UI while streaming)
   const [currentLlmResponse, setCurrentLlmResponse] = useState("");
-  // 7. Set up handler for when the user clicks on the follow up button
 
-  // 8. For the form submission, we need to set up a handler that will be called when the user submits the form
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+  });
+
+  // For the form submission, we need to set up a handler that will be called when the user submits the form
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "/") {
@@ -93,7 +105,7 @@ export default function Page() {
     };
   }, [inputRef, oppositionRef]);
 
-  // 9. Set up handler for when a submission is made, which will call the myAction function
+  // Set up handler for when a submission is made, which will call the myAction function
   const handleSubmit = async (message: string, additionalMessage: string) => {
     if (!message || !additionalMessage) return;
     const test = await Decider(message, additionalMessage);
@@ -119,6 +131,7 @@ export default function Page() {
     setOpposition("");
     await handleSubmit(messageToSend, OpMessageToSend);
   };
+
   const handleUserMessageSubmission = async (
     userMessage: string
   ): Promise<void> => {
@@ -134,7 +147,6 @@ export default function Page() {
       isStreaming: true,
       searchResults: [] as SearchResult[],
     };
-    setIsLoading(true);
     setMessages((prevMessages) => [...prevMessages, newMessage]);
     let lastAppendedResponse = "";
     try {
@@ -181,7 +193,6 @@ export default function Page() {
       }
     } catch (error) {
       console.error("Error streaming data for user message:", error);
-      setIsLoading(false);
     }
   };
   return (
@@ -198,30 +209,32 @@ export default function Page() {
       {!showWebcam && messages.length === 0 && (
         <div className="mx-auto sm:max-w-2xl sm:px-4">
           <div className="px-4 py-2 space-y-4 border-t shadow-lg rounded-xl sm:border md:py-4 ">
-            <form
-              ref={formRef}
-              onSubmit={async (e: FormEvent<HTMLFormElement>) => {
-                e.preventDefault();
-                handleFormSubmit(e);
-                setCurrentLlmResponse("");
-                if (window.innerWidth < 600) {
-                  (e.target as HTMLFormElement)["message"]?.blur();
-                }
-                const value = inputValue.trim();
-                setInputValue("");
-                if (!value) return;
-              }}
-            >
-              <InputComponent
-                inputRef={inputRef}
-                inputValue={inputValue}
-                setInputValue={setInputValue}
-                oppositionRef={oppositionRef}
-                opposition={opposition}
-                setOpposition={setOpposition}
-                onKeyDown={onKeyDown}
-              />
-            </form>
+            <Form {...form}>
+              <form
+                ref={formRef}
+                onSubmit={async (e: FormEvent<HTMLFormElement>) => {
+                  e.preventDefault();
+                  handleFormSubmit(e);
+                  setCurrentLlmResponse("");
+                  if (window.innerWidth < 600) {
+                    (e.target as HTMLFormElement)["message"]?.blur();
+                  }
+                  const value = inputValue.trim();
+                  setInputValue("");
+                  if (!value) return;
+                }}
+              >
+                <InputComponent
+                  inputRef={inputRef}
+                  inputValue={inputValue}
+                  setInputValue={setInputValue}
+                  oppositionRef={oppositionRef}
+                  opposition={opposition}
+                  setOpposition={setOpposition}
+                  onKeyDown={onKeyDown}
+                />
+              </form>
+            </Form>
           </div>
         </div>
       )}

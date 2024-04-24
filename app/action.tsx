@@ -7,35 +7,18 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { Document as DocumentInterface } from "langchain/document";
 import { OpenAIEmbeddings } from "@langchain/openai";
-import { OllamaEmbeddings } from "@langchain/community/embeddings/ollama";
-// 1.5 Configuration file for inference model, embeddings model, and other parameters
+
 import { config } from "./config";
-// 2. Determine which embeddings mode and which inference model to use based on the config.tsx. Currently suppport for OpenAI, Groq and partial support for Ollama embeddings and inference
-let openai: OpenAI;
-if (config.useOllamaInference) {
-  openai = new OpenAI({
-    baseURL: config.ollamaBaseUrl,
-    apiKey: "ollama",
-  });
-} else {
-  openai = new OpenAI({
-    baseURL: config.nonOllamaBaseURL,
-    apiKey: config.inferenceAPIKey,
-  });
-}
-// 2.5 Set up the embeddings model based on the config.tsx
-let embeddings: OllamaEmbeddings | OpenAIEmbeddings;
-if (config.useOllamaEmbeddings) {
-  embeddings = new OllamaEmbeddings({
-    model: config.embeddingsModel,
-    baseUrl: "http://localhost:11434",
-  });
-} else {
-  embeddings = new OpenAIEmbeddings({
-    modelName: config.embeddingsModel,
-  });
-}
-// 3. Define interfaces for search results and content results
+
+let openai: OpenAI = new OpenAI({
+  baseURL: config.nonOllamaBaseURL,
+  apiKey: config.inferenceAPIKey,
+});
+
+let embeddings: OpenAIEmbeddings = new OpenAIEmbeddings({
+  modelName: config.embeddingsModel,
+});
+
 interface SearchResult {
   title: string;
   link: string;
@@ -45,7 +28,7 @@ interface SearchResult {
 interface ContentResult extends SearchResult {
   html: string;
 }
-// 4. Fetch search results from Brave Search API
+
 async function getSources(
   message: string,
   numberOfPagesToScan = config.numberOfPagesToScan
@@ -180,7 +163,7 @@ async function processAndVectorizeContent(
     throw error;
   }
 }
-// 7. Fetch image search results from Brave Search API
+//Fetch image search results from Brave Search API
 async function getImages(
   message: string
 ): Promise<{ title: string; link: string }[]> {
@@ -233,7 +216,7 @@ async function getImages(
     throw error;
   }
 }
-// 8. Fetch video search results from Google Serper API
+//Fetch video search results from Google Serper API
 async function getVideos(
   message: string
 ): Promise<{ imageUrl: string; link: string }[] | null> {
@@ -317,7 +300,7 @@ const Decider = async (
     response_format: { type: "json_object" },
   });
 };
-// 9. Generate follow-up questions using OpenAI API
+//Generate follow-up questions using OpenAI
 const relevantQuestions = async (sources: SearchResult[]): Promise<any> => {
   return await openai.chat.completions.create({
     messages: [
@@ -345,7 +328,7 @@ const relevantQuestions = async (sources: SearchResult[]): Promise<any> => {
     response_format: { type: "json_object" },
   });
 };
-// 10. Main action function that orchestrates the entire process
+
 async function myAction(userMessage: string): Promise<any> {
   "use server";
   const streamable = createStreamableValue({});
@@ -390,7 +373,7 @@ async function myAction(userMessage: string): Promise<any> {
   })();
   return streamable.value;
 }
-// 11. Define initial AI and UI states
+//Define initial AI and UI states
 const initialAIState: {
   role: "user" | "assistant" | "system" | "function";
   content: string;
@@ -401,7 +384,7 @@ const initialUIState: {
   id: number;
   display: React.ReactNode;
 }[] = [];
-// 12. Export the AI instance
+
 export const AI = createAI({
   actions: {
     myAction,
